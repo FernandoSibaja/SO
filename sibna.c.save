@@ -134,6 +134,10 @@ void  SepararComando(char *entrada, char *arg[])
 	}
 	arg[j]= NULL;
 }
+void comRedireccionamiento()
+{
+	int i=0, j=0;
+}
 
 void EjecutarComando(char *arg[])
 {
@@ -156,6 +160,9 @@ void EjecutarComando(char *arg[])
 		wait(NULL);
 	}
 }
+
+
+
 
 int main(){
 	
