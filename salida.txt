@@ -1,0 +1,5 @@
+salida.txt
+sibna
+sibna.c
+sibna.c.save
+otra linea
