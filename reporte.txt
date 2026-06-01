@@ -1,0 +1,9 @@
+Usuario: fernando@gmail.com
+password=12345 
+conectado desde 192.168.1.25
+Correo alterno: onitsibaja@hotmail.com 
+token=abcdef 
+api_key=xyz123
+clave=secreta 
+passwd=admin123 
+servidor 10.0.0.8

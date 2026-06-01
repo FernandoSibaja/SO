@@ -5,6 +5,10 @@
 #include <sys/wait.h>
 #include <fcntl.h> 
 
+#include "bitacora.h"
+#include "mcensuran.h"
+#include "encriptar.h"
+
 #define max_entrada 1024
 #define max_arg 64
 #define max_cmd 20
@@ -14,7 +18,9 @@ void ComEntrada(char *entrada);
 
 void SepararComando(char *entrada, char *arg[]);
 
-int ComandoInterno(char *arg[]);
+int ComandoInternoprincipal(char *arg[]);
+
+int ComandoInternoEnHijo(char *arg[]);
 
 void EjecutarComando(char *arg[]);
 
@@ -38,7 +44,7 @@ int main(){
 		}
 
         SepararComando(entrada,arg);
-		if(ComandoInterno(arg))
+		if(ComandoInternoprincipal(arg))
 			continue;
 
 		EjecutarComando(arg);		
@@ -102,8 +108,10 @@ void  SepararComando(char *entrada, char *arg[])
 	arg[j]= NULL;
 }
 
-int ComandoInterno(char *arg[])
+int ComandoInternoprincipal(char *arg[])
 {
+	if(arg[0] == NULL)
+    	return 0;
     if(strcmp(arg[0], "exit") == 0)
     {
         exit(0);
@@ -128,6 +136,16 @@ int ComandoInterno(char *arg[])
 
         return 1;
     }
+	
+
+
+    return 0;
+}
+
+int ComandoInternoEnHijo(char *arg[])
+{
+	if(arg[0] == NULL)
+		return 0;
 	if(strcmp(arg[0], "set") == 0)
 		{
 			printf("HOME=%s\n", getenv("HOME"));
@@ -138,33 +156,57 @@ int ComandoInterno(char *arg[])
     if(strcmp(arg[0], "help") == 0)
     {
         printf("\n=== Ayuda de SINA Shell ===\n");
-			printf("Comandos internos:\n");
-			printf("  cd [ruta]       Cambia de directorio\n");
-			printf("  exit            Sale del shell\n");
-			printf("  help            Muestra esta ayuda\n");
-			printf("  history         Muestra comandos usados\n");
+		printf("Comandos internos:\n");
+		printf("  cd [ruta]                         Cambia de directorio\n");
+		printf("  exit                              Sale del shell\n");
+		printf("  help                              Muestra esta ayuda\n");
+		printf("  set                               Muestra variables HOME, PATH y USER\n");
+		printf("  bitacora <archivo> <mensaje>      Agrega un registro a la bitacora\n");
+		printf("  mcensuran <archivo> <lista>       Censura palabras usando una lista\n");
+		printf("  encriptar -e <in> <out> <clave>   Cifra un archivo\n");
+		printf("  encriptar -d <in> <out> <clave>   Descifra un archivo\n");
+		printf("  ./ocultarinfo.sh <archivo>                  Oculta correos, claves, tokens e IPs\n");
+		printf("  ./consultarbitacora.sh <bitacora> [filtro] [valor]  Consulta la bitacora\n");
 
-			printf("\nComandos externos:\n");
-			printf("  Puedes usar comandos de Linux como ls, cat, grep, mkdir, rm, touch, etc.\n");
+		printf("\nComandos externos:\n");
+		printf("  Puedes usar comandos de Linux como ls, cat, grep, mkdir, rm, touch, etc.\n");
 
-			printf("\nFunciones soportadas:\n");
-			printf("  Pipes:              comando1 | comando2 | comando3\n");
-			printf("  Redireccion salida: comando > archivo\n");
-			printf("  Append salida:      comando >> archivo\n");
-			printf("  Redireccion entrada: comando < archivo\n");
+		printf("\nFunciones soportadas:\n");
+		printf("  Pipes:              comando1 | comando2 | comando3\n");
+		printf("  Redireccion salida: comando > archivo\n");
+		printf("  Append salida:      comando >> archivo\n");
+		printf("  Redireccion entrada: comando < archivo\n");
 
-			printf("\nEjemplos:\n");
-			printf("  ls -l\n");
-			printf("  cat sibna.c | grep include\n");
-			printf("  cat sibna.c | grep include | wc -l\n");
-			printf("  ls > salida.txt\n");
-			printf("  sort < nombres.txt > ordenados.txt\n");
+		printf("\nEjemplos:\n");
+		printf("  ls -l\n");
+		printf("  cat sibna.c | grep include\n");
+		printf("  cat sibna.c | grep include | wc -l\n");
+		printf("  ls > salida.txt\n");
+		printf("  sort < nombres.txt > ordenados.txt\n");
+		printf("  bitacora cambios.txt \"se agrego una funcion\"\n");
+		printf("  mcensuran prueba.txt listainfantil.txt\n");
+		printf("  encriptar -e prueba.txt prueba.enc clave123\n");
+		printf("  encriptar -d prueba.enc recuperado.txt clave123\n");
+
 
         return 1;
     }
-
-
-    return 0;
+	if(strcmp(arg[0], "bitacora") == 0)
+	{
+		bitacora(arg);
+		return 1;
+	}
+	if(strcmp(arg[0],"mcensuran")==0)
+	{
+		mcensuran(arg);
+		return 1;
+	}
+	if(strcmp(arg[0],"encriptar")==0)
+	{
+		encriptar(arg);
+		return 1;
+	}
+	return 0;
 }
 void redireccionamiento(char *arg[])
 {
@@ -190,7 +232,7 @@ void redireccionamiento(char *arg[])
 			int fd = open(arg[i+1], O_RDONLY);
 			if(fd < 0)
 			{
-				perror("open");
+				perror("Error al abrir");
 				return;
 			}
 			dup2(fd,0);
@@ -307,9 +349,11 @@ void ComandoPipe(char *entrada)
 			}
 			   SepararComando(comandos[i], arg);
 			   redireccionamiento(arg);
-          		  execvp(arg[0], arg);
-           		  perror("Error al ejecutar comando");
-            		  exit(1); 
+			   if(ComandoInternoEnHijo(arg))
+					exit(0);
+          		execvp(arg[0], arg);
+           		perror("Error al ejecutar comando");
+            	exit(1); 
 		}
 	}
 	for(int i=0; i<cantcomandos-1;i++)
@@ -339,9 +383,11 @@ void EjecutarComando(char *arg[])
 	if(pid == 0)
 	{
 		redireccionamiento(arg);
-        	execvp(arg[0], arg);
-    	        perror("Error al ejecutar comando");
-       	        exit(1);		
+		if(ComandoInternoEnHijo(arg))
+   			 exit(0);
+        execvp(arg[0], arg);
+    	perror("Error al ejecutar comando");
+       	exit(1);		
 	}
 	else
 	{

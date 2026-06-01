@@ -1,6 +1,6 @@
-#ifdef BITACORA_H
+#ifndef BITACORA_H
 #define BITACORA_H
 
-int  bitacora(char *arg[]);
+int bitacora(char *arg[]);
 
 #endif

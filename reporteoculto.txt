@@ -1,0 +1,9 @@
+Usuario: fe******@gmail.com
+password=******** 
+conectado desde 192.168.1.xxx
+Correo alterno: on********@hotmail.com 
+token=******** 
+api_key=********
+clave=******** 
+passwd=******** 
+servidor 10.0.0.xxx

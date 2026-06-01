@@ -1,0 +1,5 @@
+/home/onit14/ShellNavarreteSibaja/SO | cambios.txt | 1000 | onit14 | 2026-05-30 19:36:00 | se agrego la funcion de bitacora
+/home/onit14/ShellNavarreteSibaja/SO | cambios.txt | 1000 | onit14 | 2026-05-30 19:36:20 | Se esta haciendo pruebas de la funcion
+/home/onit14/ShellNavarreteSibaja/SO | cambios.txt | 1000 | onit14 | 2026-05-31 00:37:54 | Otra prueba de bitacora
+/home/onit14/ShellNavarreteSibaja/SO | cambios.txt | 1000 | onit14 | 2026-05-31 21:29:51 | pruebas con redireccionamiento
+/home/onit14/ShellNavarreteSibaja/SO | cambios.txt | 1000 | onit14 | 2026-05-31 21:31:19 | prueba de pipe

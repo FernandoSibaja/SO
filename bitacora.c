@@ -11,6 +11,11 @@
 
 int bitacora(char *arg[])
 {
+     if(arg[1] == NULL || arg[2] == NULL)
+    {
+        
+        return 1;
+    }
     char *archivo = arg[1];
     char *mensaje = arg[2];
 
@@ -21,8 +26,8 @@ int bitacora(char *arg[])
         return 1;
         
      }
-    char *directorio[1024];
-    if(getcw(directorio, sizeof(directorio)) == NULL)
+    char directorio[1024];
+    if(getcwd(directorio, sizeof(directorio)) == NULL)
     {
         perror("Error al obtener el directorio actual");
         close(fd);
@@ -31,6 +36,17 @@ int bitacora(char *arg[])
     uid_t uid = getuid();
     char *usuario = getenv("USER");
     time_t tiempo =time(NULL);
+    struct  tm *infotiempo = localtime(&tiempo);
+    char fecha[100];
 
+    strftime(fecha, sizeof(fecha),"%Y-%m-%d %H:%M:%S", infotiempo);
+
+    char cadena[2048];
+    snprintf(cadena, sizeof(cadena), "%s | %s | %d | %s | %s | %s\n",directorio,archivo,uid,usuario,fecha,mensaje);
+
+    write(fd, cadena, strlen(cadena));
+    close(fd);
+    printf("Registro agregado a la bitácora\n");
+    return 0;
     
 }
