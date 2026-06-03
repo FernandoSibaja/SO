@@ -4,6 +4,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <fcntl.h> 
+#include <signal.h>
 
 #include "bitacora.h"
 #include "mcensuran.h"
@@ -30,6 +31,9 @@ void redireccionamiento(char *arg[]);
 
 int main(){
 	
+	signal(SIGINT, SIG_IGN);   // Ignora Ctrl+C en el shell
+	signal(SIGTSTP, SIG_IGN);  // Ignora Ctrl+Z en el shell
+
 	char entrada[max_entrada];
 	char *arg[max_arg];
 	while(1){
@@ -347,6 +351,9 @@ void ComandoPipe(char *entrada)
 				close(pipefds[j][0]);
 				close(pipefds[j][1]);
 			}
+
+				signal(SIGINT, SIG_DFL);   
+				signal(SIGTSTP, SIG_DFL);
 			   SepararComando(comandos[i], arg);
 			   redireccionamiento(arg);
 			   if(ComandoInternoEnHijo(arg))
@@ -382,6 +389,8 @@ void EjecutarComando(char *arg[])
 	}
 	if(pid == 0)
 	{
+		signal(SIGINT, SIG_DFL);   
+		signal(SIGTSTP, SIG_DFL);
 		redireccionamiento(arg);
 		if(ComandoInternoEnHijo(arg))
    			 exit(0);
