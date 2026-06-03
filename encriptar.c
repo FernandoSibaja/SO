@@ -53,7 +53,7 @@ int encriptar(char *arg[])
     inicializarTablas();
     if(strlen(arg[4])==0)
     {
-        fprintf(stderr, "Error: La clave no puede estar vacía.\n");
+        printf("Error: La clave no puede estar vacia.\n");
         return 1;
     }
     if(strcmp(arg[1],"-e")==0)
@@ -66,7 +66,7 @@ int encriptar(char *arg[])
     }
     else
     {
-        fprintf(stderr, "Error: Opción no válida. Use -e para cifrar o -d para descifrar.\n");
+        printf("Error: Opcion no valida. Use -e para cifrar o -d para descifrar.\n");
         return 1;
     }
 }
@@ -173,6 +173,7 @@ int cifrararchivo(char *entrada, char *salida, char *clave)
     }
     unsigned char bloque[bloques];
     int bytes;
+    int ultimoFueCompleto = 0;
     while((bytes = read(fd1,bloque,bloques))>0)
     {
         if(bytes<bloques)
@@ -183,9 +184,24 @@ int cifrararchivo(char *entrada, char *salida, char *clave)
             {
                 bloque[i]=relleno;
             }
+            ultimoFueCompleto = 0;
+        }
+        else
+        {
+            ultimoFueCompleto = 1;
         }
         cifrarbloque(bloque,clave);
         write(fd2,bloque,bloques);
+    }
+    if(ultimoFueCompleto)
+    {
+        for(int i = 0; i < bloques; i++)
+        {
+            bloque[i] = bloques;
+        }
+
+        cifrarbloque(bloque, clave);
+        write(fd2, bloque, bloques);
     }
     close(fd1);
     close(fd2);

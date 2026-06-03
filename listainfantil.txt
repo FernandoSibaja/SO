@@ -1,13 +1,13 @@
-estúpido
+estupido
 idiota
 tonto
-imbécil
+imbecil
 basura
-inútil
+inutil
 maldito
-cállate
+callate
 odio
-muérete
+muerete
 matar
 matarte
 golpearte
@@ -21,7 +21,7 @@ suicidio
 morir
 droga
 marihuana
-cocaína
+cocaina
 alcohol
 borracho
 desnudo

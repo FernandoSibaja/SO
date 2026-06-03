@@ -1,5 +1,5 @@
 corrupto
-ladrón
+ladron
 rata
 vendido
 traidor
@@ -10,13 +10,13 @@ ignorante
 borrego
 chairo
 facho
-fifí
-parásito
-inútil
+fifi
+parasito
+inutil
 pendejo
-imbécil
+imbecil
 idiota
-estúpido
+estupido
 maldito
 basura
 escoria
@@ -27,12 +27,12 @@ mafioso
 golpista
 terrorista
 extremista
-fanático
+fanatico
 radical
 censura
 fraude
 robo
-manipulación
+manipulacion
 soborno
 compra
 voto
@@ -47,4 +47,4 @@ eliminar
 desaparecer
 amenaza
 guerra
-revolución
+revolucion

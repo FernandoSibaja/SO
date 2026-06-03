@@ -46,7 +46,7 @@ int bitacora(char *arg[])
 
     write(fd, cadena, strlen(cadena));
     close(fd);
-    printf("Registro agregado a la bitácora\n");
+    printf("Registro agregado a la bitacora\n");
     return 0;
     
 }

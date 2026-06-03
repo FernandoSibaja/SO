@@ -220,12 +220,12 @@ void redireccionamiento(char *arg[])
 		{
 			if(entrada!=0)
 			{
-				printf("Error: Solo se perimite un redireccionamiento de entrada\n");
+				printf("Error, Solo se perimite un redireccionamiento de entrada\n");
 				return;
 			}
 			if(arg[i+1]==NULL)
 			{
-				printf("Error: Falta el archivo de entrada\n");
+				printf("Error, Falta el archivo de entrada\n");
 				return;
 			}
 			entrada=1;
@@ -243,19 +243,19 @@ void redireccionamiento(char *arg[])
 		{
 			if(salida!=0)
 			{
-				printf("Error: Solo se perimite un redireccionamiento de salida\n");
+				printf("Error, Solo se perimite un redireccionamiento de salida\n");
 				return;
 			}
 			if(arg[i+1]==NULL)
 			{
-				printf("Error: Falta el archivo de salida\n");
+				printf("Error, Falta el archivo de salida\n");
 				return;
 			}
 			salida=1;
 			int fd = open(arg[i+1],O_WRONLY|O_CREAT|O_TRUNC,0644); 
 			if(fd < 0)
 			{
-				perror("open");
+				perror("Error al abrir el archvio");
 				return;
 			}
 			dup2(fd,1);
@@ -266,19 +266,19 @@ void redireccionamiento(char *arg[])
 		{
 			if(salida!=0)
 			{
-				printf("Error: Solo se perimite un redireccionamiento de salida\n");
+				printf("Error, Solo se perimite un redireccionamiento de salida\n");
 				return;
 			}
 			if(arg[i+1]==NULL)
 			{
-				printf("Error: Falta el archivo de salida\n");
+				printf("Error, Falta el archivo de salida\n");
 				return;
 			}
 			salida=1;
 			int fd = open(arg[i+1],O_WRONLY|O_CREAT|O_APPEND,0644);
 			if(fd < 0)
 			{
-				perror("open");
+				perror("Error al abrir el archivo");
 				return;
 			}
 			dup2(fd,1);
